@@ -23,5 +23,25 @@ class CategoriaNew(LoginRequiredMixin, generic.CreateView):
     login_url="bases:login"
 
     def form_valid(self, form):
-        form.instance.uc = self.request.user
+        form.instance.uc = self.request.user #está relacionado na tabela
         return super().form_valid(form)
+
+
+class CategoriaEdit(LoginRequiredMixin, generic.UpdateView):
+    model=Categoria
+    template_name='inv/categoria_form.html'
+    context_object_name='obj'
+    form_class=CategoriaForm
+    success_url=reverse_lazy("inv:categoria_list")
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.um = self.request.user.id #aqui não está relacionado por isso o id
+        return super().form_valid(form)
+
+
+class CategoriaDel(LoginRequiredMixin, generic.DeleteView):
+    model=Categoria
+    template_name='inv/catalogos_del.html'
+    context_object_name="obj"
+    success_url=reverse_lazy('inv:categoria_list')

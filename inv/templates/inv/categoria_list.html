@@ -39,12 +39,12 @@
                     <tr>
                         <td>{{item.id}}</td>
                         <td>{{item.descricao}}</td>
-                        <td>{{item.estado}}</td>
+                        <td>{{item.estado|yesno:"Ativo,Inativo"}}</td>
                         <td>{{item.fc|date:"d/m/Y H:i:s"}}</td>
-                        <td>{{item.fm}}</td>
+                        <td>{{item.fm|date:"d/m/Y H:i:s"}}</td>
                         <td>
-                            <a href="#" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i></a>
+                            <a href="{% url 'inv:categoria_edit' item.id %}" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i></a>
+                            <a href="{% url 'inv:categoria_del' item.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -56,4 +56,9 @@
 {% endblock page_content %}
 
 {% block js_page %}
+<script>
+    $(document).ready(function(){
+        $('.table').DataTable()
+    })
+</script>
 {% endblock js_page %}

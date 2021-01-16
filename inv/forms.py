@@ -6,7 +6,7 @@ class CategoriaForm(forms.ModelForm):
     class Meta:
         model=Categoria
         fields=['descricao', 'estado']
-        labels={'descricao':'Descrição da categoria', 'estado':'Estado'}
+        labels={'descricao':'Descrição', 'estado':'Estado'}
         widget={'descricao':forms.TextInput}
 
     def __init__(self, *args, **kwargs):

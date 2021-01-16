@@ -18,6 +18,7 @@
 
   <!-- Custom styles for this template-->
   <link href="{% static 'base/css/sb-admin-2.min.css' %}" rel="stylesheet">
+  <link href="{% static 'base/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
 </head>
 
@@ -399,6 +400,11 @@
 
   <!-- Custom scripts for all pages-->
   <script src="{% static 'base/js/sb-admin-2.min.js' %}"></script>
+
+  <!-- Page level plugins -->
+  <script src="{% static 'base/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'base/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
   {% block js_page %}
   {% endblock js_page %}
 </body>

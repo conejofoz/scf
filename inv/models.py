@@ -3,7 +3,7 @@ from django.db import models
 from bases.models import ClaseModelo
 
 class Categoria(ClaseModelo):
-    descricao = models.CharField(max_length=100, help_text='Descrição da categoria', unique=True)
+    descricao = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return '{}'.format(self.descricao)
