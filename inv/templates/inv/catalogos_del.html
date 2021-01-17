@@ -19,7 +19,8 @@
                 <div class="row">
                     <div class="col">
                         <button type="submit" class="btn btn-danger"><i class="fas fa-question-circle">Eliminar</i></button>
-                        <a href="{% url 'inv:categoria_list' %}" class="btn btn-success"><span class="fa fa-undo"> Voltar</span></a>
+                        <!-- <a href="{% url 'inv:categoria_list' %}" class="btn btn-success"><span class="fa fa-undo"> Voltar</span></a> -->
+                        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-success"><span class="fa fa-undo"> Voltar</span></a>
                     </div>
                 </div>
             </div>

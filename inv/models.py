@@ -14,3 +14,23 @@ class Categoria(ClaseModelo):
 
     class Meta:
         verbose_name_plural = 'Categorias'
+
+
+class SubCategoria(ClaseModelo):
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    descricao = models.CharField(max_length=100)
+    #não podemos usar unique porque pode ser que tenho uma subcategoria com o mesmo nome
+    #mais em outra categoria
+
+    def __str__(self):
+        return '{}:{}'.format(self.categoria.descricao, self.descricao)
+
+    def save(self):
+        self.descricao = self.descricao.upper()
+        super(SubCategoria, self).save()
+
+    class Meta:
+        verbose_name_plural='Sub Categorias'
+        unique_together = ('categoria', 'descricao')
+        #unique composto.. só pode haver uma categoria com a mesma descricao na subcategoria
+        #uma vez que a categoria seja outra pode haver a mesma descricao novamente

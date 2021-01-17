@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+
+{% block page_content %}
+<form method="POST" class="form-inline">
+    {% csrf_token %}
+    <div class="col-xl-12 col-md-12 mb-12">
+        {% if obj %}
+        <div class="card border-left-warning shadow h-100 py-2">
+        {% else %}
+        <div class="card border-left-success shadow h-100 py-2">
+        {% endif %}
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            {% if obj %} Editar {% else %} Nova {% endif %} Sub Categoria
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="input-group">
+                                    {{ form.categoria }}
+                                    {% comment %} <input type="text" name="descricao" id="id_descricao" maxlength="100" required class="form-control" placeholder="Descrição" value="{% if obj %} {{ obj.descricao }} {% endif %}"> {% endcomment %}
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="input-group">
+                                    {{ form.descricao }}
+                                    {% comment %} <input type="text" name="descricao" id="id_descricao" maxlength="100" required class="form-control" placeholder="Descrição" value="{% if obj %} {{ obj.descricao }} {% endif %}"> {% endcomment %}
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    {{ form.estado }}
+                                    {% comment %} <label for="id_estado">Estado</label>
+                                    <input type="checkbox" name="estado" id="id_estado" class="form-control" {% if obj.estado %} checked {% endif %}> {% endcomment %}
+                                </div>
+                            </div>
+                            <!--{{ form.as_p }}-->
+                        </div>    
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn btn-danger"><span class="fa fa-save"> Salvar</span></button>
+                                <a href="{% url 'inv:subcategoria_list' %}" class="btn btn-success"><span class="fa fa-undo"> Voltar</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock page_content %}
+
+{% block js_page %}
+{% endblock js_page %}
