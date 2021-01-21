@@ -4,7 +4,7 @@
 <div class="card shadow mb-4">
     <!-- Card Header - Dropdown -->
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Lista de Marcas</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Lista de Produtos</h6>
         <div class="dropdown no-arrow">
             Ações 
             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
@@ -13,7 +13,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                 <div class="dropdown-header">Ações:</div>
-                <a class="dropdown-item" href="{% url 'inv:marca_new' %}"><i class="far fa-calendar-plus"> Nova</i></a>
+                <a class="dropdown-item" onclick="return abrir_modal('{% url 'inv:produto_new' %}')" href="#"><i class="far fa-calendar-plus"> Nova</i></a>
                 <a class="dropdown-item" href="#">Another action</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a>
@@ -23,13 +23,18 @@
     <!-- Card Body -->
     <div class="card-body">
         {% if not obj %}
-            <div class="alert alert-info">Não tem marcas</div>
+            <div class="alert alert-info">Não tem produtos</div>
         {% else %}
 
         <table class="table table-striped table-hover">
             <thead>
                 <th>Id</th>
+                <th>Sub.Cat.</th>
+                <th>Código</th>
+                <th>Barra</th>
                 <th>Descrição</th>
+                <th>Existência</th>
+                <th>Marca</th>
                 <th>Estado</th>
                 <th>Criado</th>
                 <th>Modificado</th>
@@ -39,13 +44,20 @@
                 {% for item in obj %}
                     <tr>
                         <td>{{item.id}}</td>
+                        <td>{{item.subcategoria}}</td>
+                        <td>{{item.codigo}}</td>
+                        <td>{{item.barra}}</td>
                         <td>{{item.descricao}}</td>
+                        <td>{{item.existencia}}</td>
+                        <td>{{item.marca}}</td>
                         <td>{{item.estado|yesno:"Ativo,Inativo"}}</td>
                         <td>{{item.fc|date:"d/m/Y H:i:s"}}</td>
                         <td>{{item.fm|date:"d/m/Y H:i:s"}}</td>
                         <td>
-                            <a href="{% url 'inv:marca_edit' item.id %}" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i></a>
-                            <a href="{% url 'inv:marca_desativar' item.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-thumbs-down"></i></a>
+                            <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'inv:produto_edit' item.id %}')">
+                                <i class="far fa-edit"></i>
+                            </button>
+
                         </td>
                     </tr>
                 {% endfor %}

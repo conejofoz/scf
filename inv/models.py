@@ -48,4 +48,42 @@ class Marca(ClaseModelo):
 
     class Meta:
         verbose_name_plural = 'Marcas'
+
+
+class UnidadeMedida(ClaseModelo):
+    descricao = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return '{}'.format(self.descricao)
+
+    def save(self):
+        self.descricao = self.descricao.upper()
+        super(UnidadeMedida, self).save()
+
+    class Meta:
+        verbose_name_plural = 'Unidades de Medida'
+
+
+class Produto(ClaseModelo):
+    codigo=models.CharField(max_length=20, unique=True)        
+    codigo_barra=models.CharField(max_length=50)
+    descricao=models.CharField(max_length=200)
+    preco=models.FloatField(default=0)
+    existencia=models.IntegerField(default=0)
+    ultima_compra=models.DateField(null=True, blank=True)
+
+    marca=models.ForeignKey(Marca, on_delete=models.CASCADE)
+    unidade_medida=models.ForeignKey(UnidadeMedida, on_delete=models.CASCADE)
+    subcategoria=models.ForeignKey(SubCategoria, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{}'.format(self.descricao)
+
+    def save(self):
+        self.descricao = self.descricao.upper()
+        super(Produto, self).save()
+
+    class Meta:
+        verbose_name_plural='Produtos'
+        unique_together=('codigo', 'codigo_barra')
     

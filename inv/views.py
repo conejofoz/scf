@@ -4,8 +4,8 @@ from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Categoria, SubCategoria, Marca
-from .forms import CategoriaForm, SubCategoriaForm, MarcaForm
+from .models import Categoria, SubCategoria, Marca, UnidadeMedida, Produto
+from .forms import CategoriaForm, SubCategoriaForm, MarcaForm, UnidadeMedidaForm, ProdutoForm
 
 class CategoriaView(LoginRequiredMixin, generic.ListView):
     model = Categoria
@@ -134,6 +134,110 @@ def marca_desativar(request, id):
         marca.estado=False
         marca.save()
         return redirect('inv:marca_list')
+
+    return render(request, template_name, contexto)
+
+    
+class UnidadeMedidaView(LoginRequiredMixin, generic.ListView):
+    model=UnidadeMedida
+    template_name='inv/um_list.html'
+    context_object_name='obj'    
+    login_url='bases:login'
+
+
+class UnidadeMedidaNew(LoginRequiredMixin, generic.CreateView):
+    model=UnidadeMedida
+    template_name='inv/um_form.html'    
+    context_object_name='obj'
+    form_class=UnidadeMedidaForm
+    success_url=reverse_lazy('inv:um_list')
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.uc = self.request.user
+        return super().form_valid(form)
+
+
+class UnidadeMedidaEdit(LoginRequiredMixin, generic.UpdateView):
+    model=UnidadeMedida
+    template_name='inv/um_form.html'
+    context_object_name='obj'
+    form_class=UnidadeMedidaForm
+    success_url=reverse_lazy('inv:um_list')        
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.um = self.request.user.id
+        return super().form_valid(form)
+
+
+def unidade_medida_desativar(request, id):
+    um = UnidadeMedida.objects.filter(pk=id).first()
+    contexto={}
+    template_name='inv/catalogos_del.html'
+
+    if not um:
+        return redirect('inv:um_list')
+
+    if request.method=='GET':
+        contexto={'obj':um}
+
+    if request.method=='POST':
+        um.estado=False
+        um.save()
+        return redirect('inv:um_list')
+
+    return render(request, template_name, contexto)
+
+    
+class ProdutoView(LoginRequiredMixin, generic.ListView):
+    model=Produto
+    template_name='inv/produto_list.html'
+    context_object_name='obj'    
+    login_url='bases:login'
+
+
+class ProdutoNew(LoginRequiredMixin, generic.CreateView):
+    model=Produto
+    template_name='inv/produto_form.html'    
+    context_object_name='obj'
+    form_class=ProdutoForm
+    success_url=reverse_lazy('inv:produto_list')
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.uc = self.request.user
+        return super().form_valid(form)
+
+
+class ProdutoEdit(LoginRequiredMixin, generic.UpdateView):
+    model=Produto
+    template_name='inv/produto_form.html' 
+    context_object_name='obj'
+    form_class=ProdutoForm
+    success_url=reverse_lazy('inv:produto_list')        
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.um = self.request.user.id
+        return super().form_valid(form)
+
+
+def produto_desativar(request, id):
+    um = Produto.objects.filter(pk=id).first()
+    contexto={}
+    template_name='inv/catalogos_del.html'
+
+    if not um:
+        return redirect('inv:produto_list')
+
+    if request.method=='GET':
+        contexto={'obj':um}
+
+    if request.method=='POST':
+        um.estado=False
+        um.save()
+        return redirect('inv:produto_list')
 
     return render(request, template_name, contexto)
 
