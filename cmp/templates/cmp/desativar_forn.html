@@ -1,0 +1,83 @@
+<div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        <form method="POST" class="form-inline">
+            {% csrf_token %}
+            <!--<div class="col-xl-3 col-md-6 mb-4">-->
+            <div class="col">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    <div class="alert">
+                                        Desativar {{ obj.descricao }}?
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-question-circle fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-danger" id="btnDesativar"><i class="fas fa-question-circle">Desativar</i></button>
+                                <!-- <a href="{% url 'inv:categoria_list' %}" class="btn btn-success"><span class="fa fa-undo"> Voltar</span></a> -->
+                                {% comment %} <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-success"><span class="fa fa-undo"> Voltar</span></a> {% endcomment %}
+                                <button type="button" class="btn btn-success" onclick="return fechar_modal()">Cancelar</button>        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function(){
+
+        var token = $('input[name=csrfmiddlewaretoken]').val()
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings){
+                if(!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))){
+                    xhr.setRequestHeader("X-CSRFToken", token)
+                }
+            }
+        })
+
+
+
+        $('#btnDesativar').click(function(e){
+            e.preventDefault()
+
+            let id = {{ obj.id }}
+            let template="{% url 'cmp:fornecedor_desativar' obj.id %}"
+            //template +=id //simular um erro
+            let data = {"id": id}
+            data = JSON.stringify(data)
+
+            $.ajax({
+                type: "POST",
+                url: template,
+                data: data,
+                beforeSend: function(xhr,settings){
+                    $.ajaxSettings.beforeSend(xhr, settings)
+                },
+                success: function(response){
+                    console.log(response)
+                    fechar_modal()
+                    //alert(response)
+                    let cor=(response.startsWith('Fornecedor não existe') ? 'red':'green')
+                    mensagem(response, cor)
+                },
+                error: function(jqXHR, textStatus, errorThrow){
+                    console.log(textStatus, errorThrow)
+                    mensagem(errorThrow, 'red')
+                    fechar_modal()
+                }
+            })
+        })
+    })
+</script>

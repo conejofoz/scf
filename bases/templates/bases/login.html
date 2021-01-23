@@ -68,3 +68,25 @@
 
   </div>
 {% endblock login %}
+
+
+
+{% block js_page %}
+<script>
+{% if form.errors %}
+    {% for field in form %}
+            {% if field.errors %}
+                {% for error in field.errors  %}
+                    mensagem('{{ error|escape}}', 'red')
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            mensagem('{{ error|escape}}', 'red')
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock js_page %}
