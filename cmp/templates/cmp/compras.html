@@ -1,0 +1,340 @@
+{% extends 'base/base.html'%}
+{% block page_content %}
+    <form method="post" id="frmCompras">
+        {% csrf_token %}
+        <div class="col-xl-12 col-md-12 mb-12">
+            {% if cabecalho %}
+            <div class="card border-left-warning shadow h-100 py-2">
+            {% else %}
+            <div class="card border-left-success shadow h-100 py-2">
+            {% endif %}
+                <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    {% if cabecalho %} Editar {% else %} Nova {% endif %} Compra
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="row">
+                                    <!-- Inicio Izquierda -->
+                                    <div class="col-6">
+                                        <!-- Inicio Encabezado -->
+                                        <div class="form-group row">
+                                            <label for="staticEmail" class="col-sm-3 col-form-label">Fornecedor:</label>
+                                            <div class="col-sm-9">
+                                              {{ form_enc.fornecedor }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="id_data_compra">Data Compra:</label>
+                                                    {{form_enc.data_compra}}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_descricao">Descrição:</label>
+                                                    {{form_enc.observacao}}
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="id_data_compra">No. Fatura:</label>
+                                                    {{form_enc.no_fatura}}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_descricao">Data Fatura:</label>
+                                                    {{form_enc.data_fatura}}
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="Sub Total">Sub Total:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form_enc.sub_total }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="sub_total">Desconto:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form_enc.desconto }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="total">Total:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form_enc.total }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Fin Encabezado -->
+                                    </div>
+                                    <!-- Fin Izquierda -->
+                                    <!-- Inicio Derecha -->
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col">
+                                                <table class="table table-striped table-hover dt-responsive table-sm nowrap tbl-produtos" style="width:100%">
+                                                    <thead>
+                                                        <th>Id</th>        
+                                                        <th class="all">Descrição</th>
+                                                        <th class="all">Ações</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for item in produtos %}
+                                                        <tr>
+                                                        <td>{{ item.id }}</td>
+                                                        <td>{{ item.descricao }}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-warning btn-circle"
+                                                            onclick="selectProduto({{item.id}},'{{item.descricao}}')" ><i class="far fa-hand-pointer"></i></button>
+                                                        </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_id_produto" class="col-sm-3 col-form-label">Produto</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" name="id_id_produto" id="id_id_produto" value="" required>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <input type="text" readonly class="form-control-plaintext" id="id_descricao_produto" value="" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_quantidade_detalhe" class="col-sm-2 col-form-label">Cant.:</label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" name="id_quantidade_detalhe" id="id_quantidade_detalhe" value="00" required>
+                                            </div>
+                                            <label for="id_preco_detalhe" class="col-sm-2 col-form-label">Preço:</label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" name="id_preco_detalhe" id="id_preco_detalhe" value="00" required>
+                                            </div>
+                                            <label for="id_desconto_detalhe" class="col-sm-2 col-form-label">Desc.:</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" name="id_desconto_detalhe" id="id_desconto_detalhe" value="00">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_sub_total_detalhe" class="col-sm-2 col-form-label">S. Total:</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" readonly class="form-control-plaintext" name="id_sub_total_detalhe" id="id_sub_total_detalhe" value="00">
+                                            </div>
+                                            <label for="id_total_detalhe" class="col-sm-2 col-form-label">Total:</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" readonly class="form-control-plaintext col-sm-10" name="id_total_detalhe" id="id_total_detalhe" value="00">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <button type="button" class="btn btn-sm col-sm-2" onclick="clear_Detail();"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                        <!-- Botones -->
+                                        <div class="dropdown-divider"></div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button>
+                                                <a href="{% url 'cmp:compras_list' %}" class="btn btn-success"><i class="far fa-hand-point-left"></i> Cancelar</a>
+                                            </div>
+                                        </div>
+                                        <!-- Fin Botones -->
+                                    </div>
+                                    <!-- Fin Derecha -->
+                                </div>
+                                <!-- Inicio Detalle -->
+                                <div class="row">
+                                    <div class="col">
+                                        <table class="table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <th>Produto</th>        
+                                                <th>Quantidade</th>
+                                                <th>Preço</th>
+                                                <th>Sub Total</th>
+                                                <th>Desc.</th>
+                                                <th>Total</th>
+                                                <th class="all">Ações</th>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in detalhe %}
+                                                <tr>
+                                                <td>{{ item.produto }}</td>
+                                                <td>{{ item.quantidade }}</td>
+                                                <td>{{ item.preco }}</td>
+                                                <td>{{ item.sub_total }}</td>
+                                                <td>{{ item.desconto }}</td>
+                                                <td>{{ item.total }}</td>
+                                                <td>
+                                                    <button class="btn btn-danger btn-circle" onclick="return abrir_modal('{% url 'cmp:compras_del' cabecalho.pk item.id %}')"><i class="fas fa-trash-alt"></i></button>
+                                                </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Fin Detalle -->
+                            </div>
+                        </div>
+                </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block js_page %}
+<script>
+    $(function () {
+
+        $("#id_data_compra, #id_data_fatura").datetimepicker({
+            format: 'Y-m-d',
+            timepicker:false
+        });
+
+        $("#sidebarToggle").click();
+
+        $('.table').DataTable({
+            "pageLength": 2,
+            "language": {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "<span class='fa fa-angle-double-left'></span>",
+                "sLast": "<span class='fa fa-angle-double-right'></span>",
+                "sNext": "<span class='fa fa-angle-right'></span>",
+                "sPrevious": "<span class='fa fa-angle-left'></span>"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+            }
+        });
+
+        $('#id_quantidade_detalhe,#id_preco_detalhe,#id_desconto_detalhe').change(function(){
+            calcular_detalhe();
+        });
+
+        /*Validar Envío de Detalle */
+        $("#frmCompras").submit(function(e){
+
+            var  no_fact = $("#id_no_fatura").val();
+            console.log(no_fact);
+            
+            if(no_fact.trim()==""){
+                e.preventDefault()
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'Debe Especificar No. de Fatura'
+                        });
+                return false;
+            }
+
+
+            if($("#id_data_compra").val()=="" || $("#id_data_fatura").val()==""){
+                e.preventDefault()
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'Debe Especificar Data'
+                        });
+                return false;
+            }
+
+            if($('#id_total_detalhe').val()==0 || $('#id_id_produto').val()==0 ){
+                e.preventDefault();
+                //alert("No ha agregado produto o está sin quantidadees");
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'No ha agregado produto o está sin quantidadees'
+                        })
+            }
+        });
+        /*Fin Validar Envío de Detalle */
+
+    });
+
+    function selectProduto(id,descricao)
+    {
+        $("#id_quantidade_detalhe").val(0);
+        $('#id_preco_detalhe').val(0);
+        $('#id_desconto_detalhe').val(0);
+
+        $('#id_sub_total_detalhe').val(0);
+        $('#id_total_detalhe').val(0);
+
+        $("#id_id_produto").val(+id);
+        $('#id_descricao_produto').val(descricao);
+        $('#id_quantidade_detalhe').focus();
+        $('#id_quantidade_detalhe').select();
+
+        $('.table').DataTable().search('').draw();
+    }
+
+    function calcular_detalhe()
+    {
+        var cant,prec,desc,stotal,total;
+
+        cant = $("#id_quantidade_detalhe").val();
+        cant = cant==="" ? 0 : +cant;
+        cant = cant<0 ? 0 : cant;
+
+        prec =$('#id_preco_detalhe').val();
+        prec = prec==="" ? 0 : +prec;
+        prec = prec<0 ? 0 : prec;
+
+        desc = $('#id_desconto_detalhe').val();
+        desc = desc==="" ? 0 : +desc;
+        desc = desc<0 ? 0 : desc;
+
+        desc = desc>(cant * prec) ? 0 : desc;
+
+        stotal = cant * prec;
+        total  = stotal - desc;
+
+        $('#id_quantidade_detalhe').val(cant);
+        $('#id_preco_detalhe').val(prec);
+        $('#id_desconto_detalhe').val(desc);
+
+        $('#id_sub_total_detalhe').val(stotal);
+        $('#id_total_detalhe').val(total);
+
+    }
+
+    function clear_Detail(){
+        $('#id_quantidade_detalhe').val(0);
+        $('#id_preco_detalhe').val(0);
+        $('#id_desconto_detalhe').val(0);
+
+        $('#id_sub_total_detalhe').val(0);
+        $('#id_total_detalhe').val(0);
+
+        $('#id_id_produto').val('');
+        $('#id_descricao_produto').val('');
+
+        $('.table').DataTable().search('').draw();
+
+        $("#id_fornecedor").focus();
+    }
+
+    $("#id_fornecedor").focus();
+</script>
+
+{% endblock %}
