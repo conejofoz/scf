@@ -1,0 +1,103 @@
+{% extends 'base/base.html' %}
+
+{% block page_content %}
+<div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Lista de Clientes</h6>
+        <div class="dropdown no-arrow">
+            Ações 
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Ações:</div>
+                <a class="dropdown-item" onclick="return abrir_modal('{% url 'fac:cliente_new' %}')" href="#"><i class="far fa-calendar-plus"> Novo</i></a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </div>
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+        {% if not obj %}
+            <div class="alert alert-info">Não tem clientes</div>
+        {% else %}
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>Tipo</th>
+                <th>Telefone</th>
+                <th>Estado</th>
+                <th>Criado</th>
+                <th>Modificado</th>
+                <th class="all">Ações</th>
+            </thead>
+            <tbody>
+                {% for item in obj %}
+                    <tr>
+                        <td>{{item.id}}</td>
+                        <td>{{item.nome}}</td>
+                        <td>{{item.sobrenome}}</td>
+                        <td>{{item.tipo}}</td>
+                        <td>{{item.celular}}</td>
+                        <td onclick="desativar({{item.id}})">{#item.estado|yesno:"Ativo,Inativo"#}
+                            {% if item.estado %}
+                                <i class="far fa-thumbs-up text-primary"></i>
+                            {% else %}
+                                <i class="far fa-thumbs-down text-danger"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{item.fc|date:"d/m/Y H:i:s"}}</td>
+                        <td>{{item.fm|date:"d/m/Y H:i:s"}}</td>
+                        <td>
+                            <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'fac:cliente_edit' item.id %}')">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock page_content %}
+
+{% block js_page %}
+<script>
+    function desativar(id){
+        let data = {id:id}
+        data = JSON.stringify(data)
+        let token = '{{csrf_token}}'
+
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            type: "POST",
+            url:"/fac/clientes/estado/"+id,
+            data: data,
+            success: function(response){
+               if(response==="OK"){
+                   location.reload(true)
+               } else {
+                   mensagem("Erro ao tentar mudar o estado do cliente")
+               }
+            },
+            error: function(jqXHR, textStatus, errorThrow){
+                console.log(textStatus, errorThrow)
+                mensagem(errorThrow, 'red')
+                cerrar_modal()
+            }
+        })
+    }
+
+    $(document).ready(function(){
+        $('.table').DataTable()
+    })
+</script>
+{% endblock js_page %}

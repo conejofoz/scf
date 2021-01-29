@@ -96,6 +96,11 @@
             <a class="collapse-item" href="{% url 'cmp:fornecedor_list' %}">Fornecedores</a>
             {% endif %}
 
+            <h6 class="collapse-header">Catálogo de faturação</h6>
+            {% if perms.fac.view_cliente %}
+            <a class="collapse-item" href="{% url 'fac:cliente_list' %}">Clientes</a>
+            {% endif %}
+
             <a class="collapse-item" href="cards.html">Cards</a>
           </div>
         </div>
