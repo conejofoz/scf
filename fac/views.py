@@ -6,11 +6,13 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
+from datetime import datetime
 
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
-from .models import Cliente
+from .models import Cliente, FaturaEnc, FaturaDet
 from .forms import ClienteForm
+import inv.views as inv
 
 
 class ClienteView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
@@ -68,3 +70,35 @@ def clienteDesativar(request, id):
         return HttpResponse("FAIL")    
 
     return HttpResponse("FAIL")    
+
+
+class FaturaView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
+    model = FaturaEnc
+    template_name = 'fac/fatura_list.html'
+    context_object_name = "obj"
+    permission_required="fac.view_faturaenc"
+
+
+@login_required(login_url='/login/')
+@permission_required('fac.change_faturasenc', login_url='bases:sem_privilegios')
+def faturas(request, id=None):
+    template_name='fac/faturas.html'
+
+    cabecalho = {
+        'data':datetime.today()
+    }
+
+    detalhe = {
+
+    }
+
+    clientes = Cliente.objects.filter(estado=True)
+
+    contexto={"enc": cabecalho, "det": detalhe, "clientes":clientes}
+    print(contexto)
+
+    return render(request, template_name, contexto)
+
+
+class ProdutoView(inv.ProdutoView):
+    template_name="fac/buscar_produto.html"

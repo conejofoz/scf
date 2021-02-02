@@ -1,0 +1,15 @@
+LICENSE
+MANIFEST.in
+README.rst
+setup.cfg
+setup.py
+django_userforeignkey/__init__.py
+django_userforeignkey/middleware.py
+django_userforeignkey/request.py
+django_userforeignkey.egg-info/PKG-INFO
+django_userforeignkey.egg-info/SOURCES.txt
+django_userforeignkey.egg-info/dependency_links.txt
+django_userforeignkey.egg-info/top_level.txt
+django_userforeignkey/models/__init__.py
+django_userforeignkey/models/fields.py
+docs/.gitkeep
