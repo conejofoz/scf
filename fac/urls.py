@@ -10,5 +10,6 @@ urlpatterns = [
 
     path('faturas/', FaturaView.as_view(), name="fatura_list"),
     path('faturas/new', faturas, name="fatura_new"),
+    path('faturas/edit/<int:id>', faturas, name="fatura_edit"),
     path('faturas/buscar-produto', ProdutoView.as_view(), name="fatura_produto"),
 ]

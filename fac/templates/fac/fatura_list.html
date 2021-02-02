@@ -28,7 +28,7 @@
 
         {% comment %} <table class="table table-striped table-hover"> {% endcomment %}
         <div class="buttons-toolbar">
-            <a class="btn btn-success"  href="{% url 'fat:fatura_new' %}"><i class="far fa-calendar-plus"> Nova</i></a>
+            <a class="btn btn-success"  href="{% url 'fac:fatura_new' %}"><i class="far fa-calendar-plus"> Nova</i></a>
         </div>
         <table 
         id="table"
@@ -58,7 +58,7 @@
                         <td>{{item.estado}}</td>
                         <td>{{item.estado|yesno:"Ativo,Inativo"}}</td>
                         <td>
-                            <a href="#" class="btn btn-warning btn-circle">
+                            <a href="{% url 'fac:fatura_edit' item.id %}" class="btn btn-warning btn-circle">
                                 <i class="far fa-edit"></i>
                             </a>
                         </td>

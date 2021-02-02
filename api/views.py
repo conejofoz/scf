@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404
 from .serializers import ProdutoSerializer
 from inv.models import Produto
 
+from django.db.models import Q
+
 
 class ProdutoList(APIView):
     def get(self,request):
@@ -16,7 +18,8 @@ class ProdutoList(APIView):
 
 
 class ProdutoDetalhe(APIView):
-    def get(self,response,codigo):
-        prod = get_object_or_404(Produto,codigo=codigo)
-        data = ProdutoSerializer(prod)
-        return response(data)
+    def get(self,request,codigo):
+        #prod = get_object_or_404(Produto,codigo=codigo)
+        prod = get_object_or_404(Produto, Q(codigo=codigo)|Q(codigo_barra=codigo))
+        data = ProdutoSerializer(prod).data
+        return Response(data)

@@ -231,7 +231,7 @@
     function buscarProduto()
     {
         if ($("#enc_cliente").val()==="0" || $("#enc_cliente").val()===null){
-            mensaje("Cliente No Selecionado",'red');
+            mensagem("Cliente No Selecionado",'red');
             return false;
         }
 
@@ -250,7 +250,7 @@
                 console.log(r.estado);
 
                 if(r.existencia<=0 || !r.estado){
-                    mensaje("Produto No Tiene Existencia o está inactivo",'orange')
+                    mensagem("Produto No Tiene Existencia o está inactivo",'orange')
                     $("#codigo").val("");
                     $("#descricao").val("");
                     $("#preco").val("0.00");
@@ -272,9 +272,9 @@
                 // console.log(a.status)
                 // console.log(a.responseText.detail);
                 // a.responseText["detail"]
-                // mensaje(c,'red');
+                // mensagem(c,'red');
                 if(a.status==404){
-                    mensaje("Produto -" + codigo + "- No Encontrado o No Existe",'red');
+                    mensagem("Produto -" + codigo + "- No Encontrado o No Existe",'red');
                     $("#codigo").val("");
                     $("#descricao").val("");
                     $("#preco").val("0.00");
@@ -284,6 +284,7 @@
             }
 
         });
+        
     }
 
     $(function () {
@@ -295,7 +296,7 @@
 
         $("#btnBuscar").click(function(e){
             if ($("#enc_cliente").val()==="0"){
-                mensaje("Cliente No Selecionado",'red');
+                mensagem("Cliente No Selecionado",'red');
                 return false;
             }
             abrir_modal("{% url 'fac:fatura_produto' %}");
@@ -312,6 +313,7 @@
             calcular_detalhe();
         });
 
+        //quando carrega a página  preenche os campos com jquery pegando os dados que vieram do django
         $("#enc_id").val("{{ enc.id }}");
         $("#enc_cliente").val("{{ enc.cliente.id }}").change();
         $("#data").val("{{ enc.data|date:'Y-m-d' }}");
@@ -322,14 +324,15 @@
         // $('#enc_cliente').select2().select2('val', $('#enc_cliente option:eq(1)').val());
         // https://select2.org/programmatic-control/add-select-clear-items
         $("#enc_cliente").data('select2').trigger('select', {
-            data: {"id": 3}
+            //data: {"id": 1}
+            data: {"id": $('#enc_cliente').val()}
         });
 
     });
 
     function borrar_detalhe(id)
     {
-        // mensaje(id);
+        // mensagem(id);
         $.confirm({
             theme:"modern",
             icon:"fab fa-keycdn",
@@ -351,7 +354,7 @@
 	                    var pass = this.$content.find('input#password');
 
                         if(!usuario.val().trim()){
-                            mensaje("Usuario é requerido",'red');
+                            mensagem("Usuario é requerido",'red');
                             return false;
                         }
 
@@ -361,7 +364,7 @@
                             //     content: "Contraseña es Requerida",
                             //     type: 'red'
                             // });
-                            mensaje("Senha é Requerida","red");
+                            mensagem("Senha é Requerida","red");
                             return false;
                         }
 
@@ -379,11 +382,11 @@
                                 if(r==="ok"){
                                     location.reload(true);
                                 }else{
-                                    mensaje(r,'red');
+                                    mensagem(r,'red');
                                 }
                             },
                             error: function(a,b,c){
-                                mensaje(c);
+                                mensagem(c);
                             }
                         });
                     }
@@ -398,7 +401,7 @@
         var quantidade = +$("#quantidade").val();
 
         if(quantidade>existencia){
-            mensaje("Não tem estoque suficiente");
+            mensagem("Não tem estoque suficiente");
             return false;
         }
     })
