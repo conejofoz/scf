@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Listado de Compras</title>
+    <link rel="stylesheet" href="{% static 'base/css/recibo.css' %}">
+    <style type="text/css">
+        @page {
+            width: 58mm; 
+            size: auto;   
+            margin: 0mm;
+            }
+    </style>
+</head>
+<!--<body onload="window.print();window.close()" class="receipt">-->
+<body onload="window.print();" class="receipt">
+    <div class="col-md-1 col-sm-1 col-xs-1 col-xl-1">
+        <center>
+            <b class="text-center">Piratawer Informática</b><br> 
+            <small>Endereço</small><br>
+            <small>FATURA No. {{enc.factura}}</small><br>
+        </center>
+        <small>
+            <br>
+            <b>Fatura No.:</b>&nbsp;&nbsp;{{enc.id}}&nbsp;&nbsp;
+            <b>Data Fat..:</b>&nbsp;&nbsp;{{enc.data}}&nbsp;&nbsp; <br>
+            <b>Cliente:</b>&nbsp;&nbsp;{{enc.cliente.id}}&nbsp;&nbsp;- {{enc.cliente}}<br>
+            <br><br>
+        </small>
+        <table class="table table-condensed table-sm" width="60%">
+            <thead>
+                <th>Código</th>
+                <th  align='right'>Qtd.</th>
+                <th  align='right'>P. Unit.</th>
+                <th  align='right'>Sub Total</th>
+                <th  align='right'>Desconto</th>
+                <th  align='right'>Total</th>
+            </thead>
+            <tbody>
+                {% for obj in detalle %}
+                <tr>
+                    <td>{{obj.produto.id}}</td>
+                    <td>{{obj.quantidade}}</td>
+                    <td>{{obj.preco}}</td>
+                    <td>{{obj.sub_total}}</td>
+                    <td>{{obj.desconto}}</td>
+                    <td>{{obj.total}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5">{{obj.produto}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="col-xs-1"></div>
+        <div class="col-xs-11">
+            <div class="pull-right">
+            <table class="table-responsive dt-responsive nowrap">
+                <thead>
+                    <th colspan=2>Totais</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sub Total:</td> <td align='right'>{{enc.sub_total}}</td>
+                    </tr>
+                    <tr>
+                        <td>Iva:</td> <td align='right'>{{enc.desconto}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total:</td> <td align='right'><b>{{enc.total}}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="row">
+        <small class="pie">
+            <br><br>
+            <center>
+                Criada por:  {{enc.uc}} - Data:  {{enc.fc}}
+                <br>
+                <i>&copy; &reg; <b>Silvio Coelho /Piratawer Informática</b><br> - conejofoz@gmail.com</i> 
+            </center>
+        </small>
+        </div>
+    </div>
+</body>
+</html>

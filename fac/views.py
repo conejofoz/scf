@@ -9,6 +9,9 @@ from django.http import HttpResponse
 from datetime import datetime
 from django.contrib import messages
 
+#autenticação de django
+from django.contrib.auth import authenticate
+
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
 from .models import Cliente, FaturaEnc, FaturaDet
@@ -82,7 +85,7 @@ class FaturaView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
 
 
 @login_required(login_url='/login/')
-@permission_required('fac.change_faturasenc', login_url='bases:sem_privilegios')
+@permission_required('fac.change_faturaenc', login_url='bases:sem_privilegios')
 def faturas(request, id=None):
     template_name='fac/faturas.html'
 
@@ -199,6 +202,32 @@ def apagar_detalhe_fatura(request, id):
 
     if request.method == 'GET':
         contexto = {"det":det}
+
+
+    if request.method == 'POST':
+        usr = request.POST.get("usuario")
+        pas = request.POST.get("pass")
+
+        user = authenticate(username=usr, password=pas)
+
+        if not user:
+            return HttpResponse("Usuário ou senha incorretos")
+
+        if not user.is_active:
+            return HttpResponse("Usuário desativado")
+
+        if user.is_superuser or user.has_perm("fac.sup_caixa_faturadet"):
+            det.id = None
+            det.quantidade = (-1 * det.quantidade)
+            det.sub_total = (-1 * det.sub_total)
+            det.desconto = (-1 * det.desconto)
+            det.total = (-1 * det.total)
+            det.save()
+
+            return HttpResponse("ok")
+
+        return HttpResponse("Usuário não autorizado")
+            
 
 
     return render(request, template_name, contexto)

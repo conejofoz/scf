@@ -6,7 +6,7 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <a href="#" class="btn btn-danger">Guardar</a>
-        {% comment %} <a href="{% url 'fac:fatura_imprimir_one' enc.id %}" class="btn btn-success" target="_fatura">Imprimir</a> {% endcomment %}
+        <a href="{% url 'fac:fatura_imprimir_one' enc.id %}" class="btn btn-success" target="_fatura">Imprimir</a>
         <a href="{% url 'fac:fatura_list' %}" class="btn btn-info">Cancelar</a>
     </div>
     <div class="card-body">
