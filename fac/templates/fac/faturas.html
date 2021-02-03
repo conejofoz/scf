@@ -296,7 +296,7 @@
 
         $("#btnBuscar").click(function(e){
             if ($("#enc_cliente").val()==="0"){
-                mensagem("Cliente No Selecionado",'red');
+                mensagem("Cliente Não Selecionado",'red');
                 return false;
             }
             abrir_modal("{% url 'fac:fatura_produto' %}");
@@ -399,6 +399,8 @@
     $("form").submit(function(e){
         var existencia = +$("#existencia").val();
         var quantidade = +$("#quantidade").val();
+        console.log('existencia=> ' + existencia )
+        console.log('quantidade=> ' + quantidade)
 
         if(quantidade>existencia){
             mensagem("Não tem estoque suficiente");

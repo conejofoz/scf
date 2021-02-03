@@ -190,3 +190,15 @@ def faturas(request, id=None):
 
 class ProdutoView(inv.ProdutoView):
     template_name="fac/buscar_produto.html"
+
+
+def apagar_detalhe_fatura(request, id):
+    template_name = "fac/fatura_apagar_detalhe.html"
+
+    det = FaturaDet.objects.get(pk=id)
+
+    if request.method == 'GET':
+        contexto = {"det":det}
+
+
+    return render(request, template_name, contexto)
