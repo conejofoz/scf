@@ -16,6 +16,7 @@ class FornecedorForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
+
 class ComprasEncForm(forms.ModelForm):
     data_compra = forms.DateInput()
     data_fatura = forms.DateInput()
@@ -26,6 +27,7 @@ class ComprasEncForm(forms.ModelForm):
             'fornecedor', 'data_compra', 'observacao', 'no_fatura', 'data_fatura',
             'sub_total', 'desconto', 'total'
         ]
+        
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

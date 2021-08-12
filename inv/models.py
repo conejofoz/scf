@@ -4,6 +4,7 @@ from bases.models import ClaseModelo
 
 class Categoria(ClaseModelo):
     descricao = models.CharField(max_length=100, unique=True)
+    help_text = 'Descrição da categoria'
 
     def __str__(self):
         return '{}'.format(self.descricao)

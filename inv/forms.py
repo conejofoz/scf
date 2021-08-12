@@ -66,16 +66,31 @@ class UnidadeMedidaForm(forms.ModelForm):
 class ProdutoForm(forms.ModelForm):
     class Meta:
         model=Produto
+        #fields = '__all__'
         fields=['codigo','codigo_barra','descricao', 'estado', 'preco', \
             'existencia', 'ultima_compra', 'marca', 'subcategoria', 'unidade_medida']
-        exclude=['um', 'fm', 'uc', 'fc']    
+        exclude=['um', 'fm', 'uc', 'fc']  
         #labels={'descricao':'Descrição', 'estado':'Estado'}
-        widget={'descricao':forms.TextInput}
+        
+        widgets={
+            'descricao': forms.TextInput(
+                attrs={
+                    'placeholder': 'Digite a descrição',
+                    'class': 'col-md-12'
+                }
+            ),
+            'estado': forms.CheckboxInput(
+                attrs={
+                    'class': 'text-align-left'
+                }
+            )
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({'class':'form-control'})       
+            
 
         self.fields['ultima_compra'].widget.attrs['readonly'] = True      
         self.fields['existencia'].widget.attrs['readonly'] = True      

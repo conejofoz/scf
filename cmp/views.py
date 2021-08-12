@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 
+
 from django.views import generic
 from django.urls import reverse_lazy
 import datetime
@@ -189,9 +190,9 @@ def compras(request, compra_id=None):
             enc.desconto = desconto["desconto__sum"]
             enc.save()
 
-        return redirect("cmp:compras_edit", compra_id=compra_id)
+        return redirect("cmp:compras_edit", compra_id=compra_id) #retorno do POST
 
-    return render(request, template_name, contexto)
+    return render(request, template_name, contexto) #retorno do GET
 
 
 class CompraDetDelete(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):

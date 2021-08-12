@@ -18,4 +18,5 @@ urlpatterns = [
 
     path('compras/lista', reporte_compras, name='compras_print_all'),
     path('compras/<int:compra_id>/imprimir', imprimir_compra, name='compras_print_one'),
+    
 ]
